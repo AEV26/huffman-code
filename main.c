@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include "libs/string.h"
 #include "libs/node.h"
+#include "libs/code.h"
 
 STR commands[3][6] = {
         {"exit", 4},
         {"comp", 4},
         {"decomp", 6}
     };
+
+CODE** codes[256];
 
 int readFromFile(STR* path, int* freq);
 
