@@ -11,6 +11,4 @@ add_executable(huffman-code
         libs/node.c
         libs/string.h
         libs/string.c
-        libs/code.h
-        libs/code.c
         )

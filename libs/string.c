@@ -2,16 +2,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-STR* init_string()
+STR* initString()
 {
     STR* str = (STR*)malloc(sizeof(STR));
-    str->data = (char*)malloc(sizeof(char));
     str->length = 0;
+    str->data = (char*)malloc(str->length * sizeof(char));
 
     return str;
 }
 
-STR* string_delete(STR* str)
+STR* deepCopyRev(STR* str)
+{
+    STR* new_str = initString();
+    for (int i = 0; i < str->length; ++i)
+        pushSymb(new_str, str->data[i]);
+
+    return new_str;
+}
+
+STR* stringDelete(STR* str)
 {
     free(str->data);
     str->length = 0;
@@ -20,22 +29,22 @@ STR* string_delete(STR* str)
     return str;
 }
 
-STR* get_string()
+STR* getString()
 {
-    STR* str = init_string();
+    STR* str = initString();
 
     char chr = getchar();
     while (chr != '\n')
     {
-        str = push_symb(str, chr);
+        pushSymb(str, chr);
         chr = getchar();
     }
-    str = push_symb(str, '\0');
+    pushSymb(str, '\0');
 
     return str;
 }
 
-STR* push_symb(STR* str, char symb)
+void pushSymb(STR* str, char symb)
 {
     str->length += 1;
     str->data = (char*) realloc(
@@ -43,17 +52,24 @@ STR* push_symb(STR* str, char symb)
             sizeof(char) * str->length
             );
     str->data[str->length - 1] = symb;
-
-    return str;
 }
 
-ARR_STR* string_split(STR* str, char symb)
+STR* popLastSymb(STR* str)
+{
+    STR* new_string = initString();
+    for (int i = 0; i < str->length - 1; ++i)
+        pushSymb(new_string, str->data[i]);
+
+    return new_string;
+}
+
+ARR_STR* stringSplit(STR* str, char symb)
 {
     int capacity = 1;
     ARR_STR* list_of_words = (ARR_STR*) malloc(sizeof (ARR_STR) * capacity);
 
-    STR* word = init_string();
-    str = push_symb(str, symb);
+    STR* word = initString();
+    pushSymb(str, symb);
 
     for (int i = 0; i < str->length; ++i)
     {
@@ -63,17 +79,17 @@ ARR_STR* string_split(STR* str, char symb)
             capacity++;
 
             list_of_words = (ARR_STR*) realloc(list_of_words, sizeof (ARR_STR) * capacity);;
-            word = init_string();
+            word = initString();
             continue;
         }
 
-        word = push_symb(word, str->data[i]);
+        pushSymb(word, str->data[i]);
     }
 
     return list_of_words;
 }
 
-int string_compare(STR* str1, STR* str2)
+int stringCompare(STR* str1, STR* str2)
 {
     if (str1->length != str2->length)
         return 0;

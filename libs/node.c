@@ -34,6 +34,9 @@ NODE * CreateNodeForLetter(int freq, char letter)
     new_node->freq = freq;
     new_node->symb = letter;
     new_node->isSymb = 1;
+    new_node->left = NULL;
+    new_node->right = NULL;
+    new_node->next = 0;
     return new_node;
 }
 
